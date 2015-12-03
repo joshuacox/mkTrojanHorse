@@ -1,5 +1,5 @@
 #!/bin/bash
-TMP_RC_LOCAL_DIR=/tmp/mktemp -d --suffix=RCLOCAL
+TMP_RC_LOCAL_DIR=mktemp -d --suffix=RCLOCAL
 TMP_RC_LOCAL=$TMP_RC_LOCAL_DIR/rc.local
 grep -v '^exit\ 0$' /etc/rc.local > $TMP_RC_LOCAL
 
