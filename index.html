@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Mktrojanhorse by joshuacox</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Mktrojanhorse</h1>
+        <h2>This will make a linux machine into a Trojan Horse, and by that I mean we&#39;ll add a line to rc.local that starts autossh to create a reverse tunnel</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/joshuacox/mkTrojanHorse/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/joshuacox/mkTrojanHorse/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/joshuacox/mkTrojanHorse" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="mktrojanhorse" class="anchor" href="#mktrojanhorse" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>mkTrojanHorse</h1>
+
+<p>This will make a linux machine into a Trojan Horse, 
+and by that I mean we'll add a line to rc.local 
+that starts autossh to create a reverse tunnel
+This enables you to connect back to this machine no matter where it pops 
+up on the internet at large, despite its many nefarious uses, this is my preferred method
+for accessing a raspberryPi remotely when you put it up behind a consumer internet connection
+i.e. dynamic IP address and NAT firewall
+I, also, put this sort of thing on my mom's computer so that I can update her machine or give 
+her other tech support from afar.</p>
+
+<h3>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h3>
+
+<p>Just just use the default recipe</p>
+
+<pre><code>make trojan
+</code></pre>
+
+<p>you will be prompted for everything else.</p>
+
+<h3>
+<a id="nsfw" class="anchor" href="#nsfw" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>NSFW</h3>
+
+<p>This is Not Safe For Work, it is very appropriate in certain situation and can be used without punity,
+but make sure both management and the heads of IT understand and give you permission for this one
+BEFORE you implement this.</p>
+
+<p>My intended use is to be able to log into a remote raspberryPi and pull down updated code, reconfigure things, etc.
+This can also be used to break into corporate firewalls so you can chat like you are at work after you've gone home
+and other nasty uses, so it's best to be very clear about usage with the owners of any network before implementing this.</p>
+
+<p>That being said, it is also really hard to detect and prove, as you cannot distinguish this connection
+from another outbound ssh connection to the same machine that does not have the reverse tunnel inside of it.</p>
+
+<p>However, if someone has access to the internal machine a quick <code>ps aux|grep ssh</code> will show something like this:</p>
+
+<pre><code> root       283  0.0  0.1   1724  1192 ?        Ss   13:46   0:00 /usr/lib/autossh/autossh -M 66666 -N    -o PubkeyAuthentication=yes -o PasswordAuthentication=no -i /root/.ssh/id_ecdsa -R 
+</code></pre>
+
+<p>There are many other ways your own machine can rat you out. </p>
+
+<p>You've been warned, use this on machines and networks that you are the owner/administrator of only to be safe.</p>
+
+<p>For example, the opposite seems totally appropriate to me, 
+i.e. not to access work computers from home, but rather to access home computers from work.
+e.g. if you were to access a raspberryPi on your home network
+from behind a dynamic IP + NAT firewall using this method from your work computer. Say to mount your music collection
+via sshfs.  But again, if in doubt talk to your management.</p>
+
+<h3>
+<a id="sshconfig-additions" class="anchor" href="#sshconfig-additions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>~/.ssh/config additions</h3>
+
+<p>I leave <a href="https://github.com/joshuacox/octossh">this</a> docker container up on a static IP, and that is my remote jump box
+it usually runs on a nonstandard port (i.e. like 2222), </p>
+
+<pre><code>docker run -it -e -p22:2222 KEY_URL=https://raw.githubusercontent.com/WebHostingCoopTeam/keys/master/keys joshuacox/octossh
+</code></pre>
+
+<p>Notice you can fork my 'keys' repo and remove all the keys, or create your own where there is a file 'keys' that contains
+valid ssh keys</p>
+
+<p>Now when you <code>make trojan</code> the remote ssh host information will be for the above jump box</p>
+
+<h6>
+<a id="for-more-related-errata" class="anchor" href="#for-more-related-errata" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>For more related errata:</h6>
+
+<p><a href="http://joshuacox.github.io/">joshuacox.github.io</a></p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
