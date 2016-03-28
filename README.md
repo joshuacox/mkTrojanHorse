@@ -12,7 +12,9 @@ her other tech support from afar.
 
 ### Usage
 
-Just just use the default recipe
+First put up a ssh host that both you and the raspberryPi are keyed for, log in from both to ensure it is added to known_hosts etc
+
+Then just just use the default recipe
 
 ```
 make trojan
@@ -20,6 +22,20 @@ make trojan
 
 you will be prompted for everything else.
 
+##### ~/.ssh/config additions
+
+I put this in my `~/.ssh/config`
+
+```
+Host remotePi
+  User root
+  ForwardAgent yes
+  Hostname 127.0.0.1
+  Port 12345
+  ProxyCommand ssh -q -W  %h:%p -p2222 root@remotessh.example.com
+```
+
+Now you can login to pi like this `ssh remotePi`
 
 ### NSFW
 
@@ -50,7 +66,7 @@ e.g. if you were to access a raspberryPi on your home network
 from behind a dynamic IP + NAT firewall using this method from your work computer. Say to mount your music collection
 via sshfs.  But again, if in doubt talk to your management.
 
-### ~/.ssh/config additions
+### OctoSSH
 
 I leave [this](https://github.com/joshuacox/octossh) docker container up on a static IP, and that is my remote jump box
 it usually runs on a nonstandard port (i.e. like 2222), 
