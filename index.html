@@ -44,12 +44,29 @@ her other tech support from afar.</p>
 <h3>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h3>
 
-<p>Just just use the default recipe</p>
+<p>First put up a ssh host that both you and the raspberryPi are keyed for, log in from both to ensure it is added to known_hosts etc</p>
+
+<p>Then just just use the default recipe</p>
 
 <pre><code>make trojan
 </code></pre>
 
 <p>you will be prompted for everything else.</p>
+
+<h5>
+<a id="sshconfig-additions" class="anchor" href="#sshconfig-additions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>~/.ssh/config additions</h5>
+
+<p>I put this in my <code>~/.ssh/config</code></p>
+
+<pre><code>Host remotePi
+  User root
+  ForwardAgent yes
+  Hostname 127.0.0.1
+  Port 12345
+  ProxyCommand ssh -q -W  %h:%p -p2222 root@remotessh.example.com
+</code></pre>
+
+<p>Now you can login to pi like this <code>ssh remotePi</code></p>
 
 <h3>
 <a id="nsfw" class="anchor" href="#nsfw" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>NSFW</h3>
@@ -81,7 +98,7 @@ from behind a dynamic IP + NAT firewall using this method from your work compute
 via sshfs.  But again, if in doubt talk to your management.</p>
 
 <h3>
-<a id="sshconfig-additions" class="anchor" href="#sshconfig-additions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>~/.ssh/config additions</h3>
+<a id="octossh" class="anchor" href="#octossh" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>OctoSSH</h3>
 
 <p>I leave <a href="https://github.com/joshuacox/octossh">this</a> docker container up on a static IP, and that is my remote jump box
 it usually runs on a nonstandard port (i.e. like 2222), </p>
