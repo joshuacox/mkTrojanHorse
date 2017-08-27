@@ -14,14 +14,15 @@ help:
 	@echo ""  This is merely a base image for usage read the README file
 	@echo ""   1. make trojan       - build and install trojan horse  
 
-trojan: NAME TAG SSH_PORT_EXPOSED SSH_PORT_HIDDEN SSH_PORT_MONITOR SSH_HOST trojanHorse addline
+trojan: NAME TAG SSH_PORT_EXPOSED SSH_PORT_HIDDEN SSH_PORT_MONITOR SSH_HOST SSH_USER trojanHorse addline
 
 trojanHorse:
 	$(eval SSH_PORT_EXPOSED := $(shell cat SSH_PORT_EXPOSED))
 	$(eval SSH_PORT_HIDDEN := $(shell cat SSH_PORT_HIDDEN))
 	$(eval SSH_PORT_MONITOR := $(shell cat SSH_PORT_MONITOR))
 	$(eval SSH_HOST := $(shell cat SSH_HOST))
-	./buildHorse $(SSH_PORT_EXPOSED) $(SSH_PORT_HIDDEN) $(SSH_PORT_MONITOR) $(SSH_HOST)
+	$(eval SSH_USER := $(shell cat SSH_USER))
+	./buildHorse $(SSH_PORT_EXPOSED) $(SSH_PORT_HIDDEN) $(SSH_PORT_MONITOR) $(SSH_HOST) $(SSH_USER)
 
 addline:
 	./add_line_to_rc_local
@@ -54,4 +55,9 @@ SSH_PORT_MONITOR:
 SSH_HOST:
 	@while [ -z "$$SSH_HOST" ]; do \
 		read -r -p "This is the host the trojan will call out to and make the reverse tunnel at. Enter the SSH_HOST you wish to associate with this container [SSH_HOST]: " SSH_HOST; echo "$$SSH_HOST">>SSH_HOST; cat SSH_HOST; \
+	done ;
+
+SSH_USER:
+	@while [ -z "$$SSH_USER" ]; do \
+		read -r -p "This is the user on the host the trojan will call out to and make the reverse tunnel at. Enter the SSH_USER you wish to associate with this container [SSH_USER]: " SSH_USER; echo "$$SSH_USER">>SSH_USER; cat SSH_USER; \
 	done ;
